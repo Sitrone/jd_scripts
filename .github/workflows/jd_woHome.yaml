@@ -28,7 +28,7 @@ jobs:
         run: |
           cd ~/Scripts
           npm install
-      - name: '运行 【京东京东梦想工厂】'
+      - name: '运行 【京东小窝】'
         if: env.JD_COOKIE
         run: |
           cd ~/Scripts
