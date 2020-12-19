@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"math/rand"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 )
@@ -14,7 +15,6 @@ var urlList = []string{
 	"http://api.turinglabs.net/api/v1/jd/jxfactory/create/zFFlhAJjtMI2V831ukVbeA==/",
 	"http://api.turinglabs.net/api/v1/jd/jxfactory/create/yq67HFJ4c31f4le6SxIQyw==/",
 	"http://api.turinglabs.net/api/v1/jd/jxfactory/count/",
-
 
 	"http://api.turinglabs.net/api/v1/jd/bean/create/fw4h7b36sezhaflagqig2l6nea/",
 	"http://api.turinglabs.net/api/v1/jd/bean/create/3hffvb4ywqkfk6fmrmnuugt3ne/",
@@ -42,6 +42,8 @@ func main() {
 			return sendGetRequest(api)
 		})
 	}
+
+	sendNotify()
 }
 
 type Response struct {
@@ -104,4 +106,32 @@ func withRetry(attempts uint, initSleep time.Duration, f func() error) error {
 	}
 
 	return nil
+}
+
+func sendNotify() {
+	pushKey, ok := os.LookupEnv("PUSH_KEY")
+	if !ok {
+		fmt.Println("no push key found")
+		return
+	}
+	
+	api := fmt.Sprintf("https://sc.ftqq.com/%s.send?text=更新互助码成功~", pushKey)
+	resp, err := http.Get(api)
+	if err != nil {
+		fmt.Printf("failed to send notify reqeust, err=%v\n", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode/100 != 2 {
+		fmt.Printf("send notify request http code error, code=%d, msg=%s\n", resp.StatusCode, resp.Status)
+	}
+
+	data, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Printf("failed to get api resp body, url=%s, err=%v\n", api, err)
+		return
+	}
+
+	fmt.Printf("send notify ret:%s", string(data))
 }
