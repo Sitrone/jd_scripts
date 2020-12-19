@@ -37,7 +37,6 @@ var urlList = []string{
 
 func main() {
 	for _, api := range urlList {
-		time.Sleep(time.Second * 10)
 		_ = withRetry(50, time.Millisecond*100, func() error {
 			return sendGetRequest(api)
 		})
