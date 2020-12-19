@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"math/rand"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -36,6 +37,7 @@ var urlList = []string{
 
 func main() {
 	for _, api := range urlList {
+		time.Sleep(time.Second * 10)
 		_ = withRetry(50, time.Millisecond*100, func() error {
 			return sendGetRequest(api)
 		})
@@ -58,6 +60,10 @@ func sendGetRequest(api string) error {
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode/100 != 2 {
+		return fmt.Errorf("http code error, api=%s, code=%d, msg=%s", api, resp.StatusCode, resp.Status)
+	}
+
 	data, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Printf("failed to get api resp body, url=%s, err=%v\n", api, err)
@@ -74,7 +80,11 @@ func sendGetRequest(api string) error {
 	}
 
 	if rspBody.Code != 200 {
-		return err
+		if rspBody.Code == 400 && strings.Contains(rspBody.Message, "existed") {
+			return nil
+		}
+
+		return fmt.Errorf("failed to send request, url=%s, err=%s", api, fmt.Sprintf("code=%d, err=%s", rspBody.Code, rspBody.Message))
 	}
 
 	return nil
