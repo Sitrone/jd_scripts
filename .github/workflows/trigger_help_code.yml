@@ -13,7 +13,11 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-
+    - name: Setup timezone
+      uses: zcong1993/setup-timezone@v1.1.1
+      with:
+       timezone: Asia/Shanghai
+       
     - name: Set up Go 1.x
       uses: actions/setup-go@v2
       with:
