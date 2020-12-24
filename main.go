@@ -36,6 +36,10 @@ var urlList = []string{
 	"https://code.chiang.fun/api/v1/jd/jdzz/create/ADjdVlq-RyDAJ/",
 	"https://code.chiang.fun/api/v1/jd/jdzz/count",
 	
+	"https://code.chiang.fun/api/v1/jd/jdcrazyjoy/create/VRnb-V_pl9I=/",
+	"https://code.chiang.fun/api/v1/jd/jdcrazyjoy/create/nBgazKW8-Y47zKi5sxcGkw==/",
+	"https://code.chiang.fun/api/v1/jd/jdcrazyjoy/count",
+	
 	"http://api.turinglabs.net/api/v1/jd/cleantimeinfo/",
 }
 
