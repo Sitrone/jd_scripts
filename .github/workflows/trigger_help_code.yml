@@ -3,7 +3,7 @@ name: 更新互助码
 on:
   workflow_dispatch:
   schedule:
-     - cron: '30 0 1,10,20 * *'
+     - cron: '30 17 1,9,19,30,31 * *'
   watch:
     types: started
 
