@@ -102,6 +102,7 @@ func sendGetRequest(api string) error {
 }
 
 func withRetry(attempts int, initSleep time.Duration, f func() error) error {
+	fmt.Printf("current attempts=%d, sleepTime=%s", attempts, initSleep)
 	if err := f(); err != nil {
 		if attempts--; attempts > 0 {
 			jitter := time.Duration(rand.Int63n(int64(initSleep)))
