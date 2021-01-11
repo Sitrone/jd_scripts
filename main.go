@@ -89,7 +89,9 @@ func sendGetRequest(api string) error {
 	}
 
 	if rspBody.Code != 200 {
-		if rspBody.Code == 400 && strings.Contains(rspBody.Message, "existed") {
+		if rspBody.Code == 400 && (
+			strings.Contains(strings.ToLower(rspBody.Message), "existed") ||
+				strings.Contains(strings.ToLower(rspBody.Message), "is exists")) {
 			return nil
 		}
 
