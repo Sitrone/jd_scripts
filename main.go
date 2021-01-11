@@ -101,7 +101,7 @@ func sendGetRequest(api string) error {
 	return nil
 }
 
-func withRetry(attempts uint, initSleep time.Duration, f func() error) error {
+func withRetry(attempts int, initSleep time.Duration, f func() error) error {
 	if err := f(); err != nil {
 		if attempts--; attempts > 0 {
 			jitter := time.Duration(rand.Int63n(int64(initSleep)))
