@@ -13,24 +13,30 @@ jobs:
     build:
         runs-on: ubuntu-latest
         if: github.event.repository.owner.id == github.event.sender.id
+        env:
+            JD_COOKIE: ${{ secrets.JD_COOKIE }}
         steps:
-            - name: Checkout codes
-              uses: actions/checkout@v2
-            - name: Use Node.js
+            - name: Checkout
+              run: |
+                  git clone --single-branch --branch master https://github.com/lxk0301/jd_scripts.git ~/Scripts
+            - name: Use Node.js 12.x
               uses: actions/setup-node@v1
               with:
-                  node-version: "12.x"
-            - name: Run app
-              run: npm install
-            - run: node onlyOneExecute.js
+                  node-version: 12.x
+            - name: npm install
+              run: |
+                  cd ~/Scripts
+                  npm install
+            - name: '运行 【京东每日签到】'
+              if: env.JD_COOKIE
+              run: |
+                  cd ~/Scripts
+                  node jd_bean_sign.js
               env:
-                  JD_COOKIE: ${{ secrets.JD_COOKIE }}
-                  JD_BEAN_STOP: ${{ secrets.JD_BEAN_STOP }}
                   PUSH_KEY: ${{ secrets.PUSH_KEY }}
                   BARK_PUSH: ${{ secrets.BARK_PUSH }}
-                  BARK_SOUND: ${{ secrets.BARK_SOUND }}
                   TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
                   TG_USER_ID: ${{ secrets.TG_USER_ID }}
+                  BARK_SOUND: ${{ secrets.BARK_SOUND }}
                   DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
                   DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
-                  SYNCURL: https://github.com/lxk0301/jd_scripts/raw/master/jd_bean_sign.js;https://raw.githubusercontent.com/lxk0301/jd_scripts/master/USER_AGENTS.js
