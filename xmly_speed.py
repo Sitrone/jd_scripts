@@ -7,12 +7,13 @@ from dateutil import tz
 
 
 def loadFileContent(downloadUrl):
-	urls = downloadUrl.split(";")
-	if len(urls) == 1:
-		return requests.get(downloadUrl).text
-	else:
-		writeFile(requests.get(urls[1]).text, "USER_AGENTS.js")
-		return requests.get(urls[0]).text
+    urls = downloadUrl.split(";")
+    if len(urls) == 1:
+        return requests.get(downloadUrl).text
+    if len(urls) == 2:
+        writeFile(requests.get(urls[1]).text, "USER_AGENTS.js")
+        return requests.get(urls[0]).text
+    raise Exception("url not found")
 
 
 def writeFile(content, fileName):
