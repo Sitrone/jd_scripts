@@ -1,7 +1,6 @@
 name: 主页额外京豆
 
 on:
-  workflow_dispatch:
   schedule:
      - cron: '10 7 * * *'
   watch:
